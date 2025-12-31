@@ -1,128 +1,65 @@
 // Static data for projects, solutions, and milestones
 
-const projectsData = [
-  {
-    id: 1,
-    title: 'Project Alpha',
-    description: 'A modern web application built with cutting-edge technologies, focusing on user experience and performance.',
-    tech: ['React', 'Node.js', 'PostgreSQL'],
-    link: '#'
-  },
-  {
-    id: 2,
-    title: 'Project Beta',
-    description: 'An open-source tool that simplifies complex workflows for developers and designers alike.',
-    tech: ['TypeScript', 'Vue', 'MongoDB'],
-    link: '#'
-  },
-  {
-    id: 3,
-    title: 'Project Gamma',
-    description: 'A mobile-first platform designed to connect communities and foster collaboration.',
-    tech: ['React Native', 'GraphQL', 'Firebase'],
-    link: '#'
-  },
-  {
-    id: 4,
-    title: 'Project Delta',
-    description: 'An innovative design system that promotes consistency and accelerates development.',
-    tech: ['Design Tokens', 'CSS', 'JavaScript'],
-    link: '#'
-  },
-  {
-    id: 5,
-    title: 'Project Epsilon',
-    description: 'A data visualization tool that makes complex information accessible and engaging.',
-    tech: ['D3.js', 'Python', 'WebGL'],
-    link: '#'
-  },
-  {
-    id: 6,
-    title: 'Project Zeta',
-    description: 'A developer toolkit that streamlines common tasks and improves productivity.',
-    tech: ['CLI', 'Node.js', 'TypeScript'],
-    link: '#'
-  }
-];
+const projectsData = []; // Will load dynamically or via API if needed
 
-const solutionsData = [
-  {
-    id: 1,
-    title: 'Web Development Solutions',
-    description: 'Comprehensive web development services from frontend to backend, ensuring scalable and maintainable code.',
-    tech: ['Full Stack', 'Cloud', 'DevOps'],
-    link: '#'
-  },
-  {
-    id: 2,
-    title: 'API Architecture',
-    description: 'Design and implementation of robust API solutions that scale with your business needs.',
-    tech: ['REST', 'GraphQL', 'Microservices'],
-    link: '#'
-  },
-  {
-    id: 3,
-    title: 'Performance Optimization',
-    description: 'Expert analysis and optimization to improve application speed, efficiency, and user experience.',
-    tech: ['Performance', 'Caching', 'CDN'],
-    link: '#'
-  },
-  {
-    id: 4,
-    title: 'Security Solutions',
-    description: 'Comprehensive security audits and implementations to protect your applications and data.',
-    tech: ['Security', 'Encryption', 'Auth'],
-    link: '#'
-  }
-];
+const solutionsData = []; // Will load dynamically or via API if needed
 
-const milestonesData = [
-  {
-    id: 1,
-    date: 'January 2025',
-    title: 'Website Launch',
-    description: 'Launched our new website and rebranded as OK Devs. Reached 1000+ community members.',
-    media: 'Placeholder'
-  },
-  {
-    id: 2,
-    date: 'February 2025',
-    title: 'Project Alpha Release',
-    description: 'Released Project Alpha to public beta. Started our first open-source initiative.',
-    media: 'Placeholder'
-  },
-  {
-    id: 3,
-    date: 'Q4 2024',
-    title: 'Major Projects Completed',
-    description: 'Completed three major projects. Expanded our team with talented new members.',
-    media: 'Placeholder'
-  },
-  {
-    id: 4,
-    date: 'Q3 2024',
-    title: 'Community Event',
-    description: 'Hosted our first community event. Published 10+ technical blog posts.',
-    media: 'Placeholder'
-  },
-  {
-    id: 5,
-    date: 'Q2 2024',
-    title: 'Design System Launch',
-    description: 'Reached 500 active contributors. Launched our design system.',
-    media: 'Placeholder'
-  },
-  {
-    id: 6,
-    date: 'Q1 2024',
-    title: 'OK Devs Founded',
-    description: 'Formed OK Devs collective. Completed our first collaborative project.',
-    media: 'Placeholder'
-  }
-];
+// Fetch and parse milestone data from milestones.html
+async function fetchMilestonesData() {
+  try {
+    const response = await fetch('milestones.html');
+    if (!response.ok) throw new Error('Failed to fetch milestones.html');
+    const html = await response.text();
 
-// Export for use in other modules
+    // Create a DOM parser if not in Node (assume browser)
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, 'text/html');
+
+    // Find all milestone sections with <h2>{year}</h2>
+    const milestoneSections = Array.from(doc.querySelectorAll('section.card h2'))
+      .filter(h2 => h2.textContent.match(/^\d{4}$/))
+      .map(h2 => h2.parentElement);
+
+    // Parse data
+    let id = 1;
+    const out = [];
+    for (const section of milestoneSections) {
+      const year = section.querySelector('h2').textContent.trim();
+      const grid = section.querySelector('.grid-2');
+      if (!grid) continue;
+      const items = grid.querySelectorAll('div');
+      for (const el of items) {
+        const dateEl = el.querySelector('h3');
+        const descEl = el.querySelector('p');
+        if (!dateEl || !descEl) continue;
+        out.push({
+          id: id++,
+          date: dateEl.textContent.trim() + ' ' + year,
+          title: '', // Optional: use date as title or add logic for title if needed
+          description: descEl.textContent.trim(),
+          media: '' // Could extract media here if present
+        });
+      }
+    }
+    return out;
+  } catch (e) {
+    console.error('Error fetching milestones:', e);
+    return [];
+  }
+}
+
+// milestonesData will be populated asynchronously if used in SPA context
+let milestonesData = [];
+
+// Optionally trigger loading on import if needed
+fetchMilestonesData().then(data => {
+  milestonesData = data;
+  // Uncomment the next line if you want to expose milestonesData globally upon fetch
+  // window.milestonesData = data;
+});
+
+// Export for use in other modules if running in node/js modules
 if (typeof module !== 'undefined' && module.exports) {
-  module.exports = { projectsData, solutionsData, milestonesData };
+  module.exports = { projectsData, solutionsData, milestonesData, fetchMilestonesData };
 }
 
