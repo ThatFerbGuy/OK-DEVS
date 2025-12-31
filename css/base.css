@@ -11,6 +11,7 @@
 
 html {
   scroll-behavior: smooth;
+  height: 100%;
 }
 
 body {
@@ -19,6 +20,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
+  height: 100%;
 }
 
 /* Layout */
@@ -28,10 +30,14 @@ body {
   padding: 0 1.5rem;
 }
 
-main {
-  min-height: calc(100vh - 200px);
-  padding: 2rem 1.5rem;
+.app-content {
+  min-height: calc(100vh - 80px);
   padding-top: 80px;
+  transition: opacity 0.3s ease;
+}
+
+.app-content.loading {
+  opacity: 0.5;
 }
 
 /* Typography */
@@ -55,6 +61,7 @@ p {
 a {
   text-decoration: none;
   transition: opacity 0.2s ease;
+  color: inherit;
 }
 
 a:hover {
@@ -76,12 +83,12 @@ button:focus {
 }
 
 /* Inputs */
-input, textarea {
+input, textarea, select {
   font-family: inherit;
   font-size: inherit;
 }
 
-input:focus, textarea:focus {
+input:focus, textarea:focus, select:focus {
   outline: 2px solid var(--accent-color);
   outline-offset: 2px;
 }
@@ -110,4 +117,3 @@ img {
   white-space: nowrap;
   border-width: 0;
 }
-

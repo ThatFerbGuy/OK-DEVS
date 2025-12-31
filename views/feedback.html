@@ -1,0 +1,42 @@
+<section class="view-feedback">
+  <div class="container">
+    <div class="page-header">
+      <h1>Feedback</h1>
+      <p>Your feedback helps us improve</p>
+    </div>
+
+    <div class="feedback-container">
+      <form id="feedbackForm" class="feedback-form">
+        <div class="form-group">
+          <label for="feedbackType">Feedback Type</label>
+          <select id="feedbackType" name="type" required>
+            <option value="">Select a type</option>
+            <option value="suggestion">Suggestion</option>
+            <option value="bug">Bug Report</option>
+            <option value="feature">Feature Request</option>
+            <option value="other">Other</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="feedbackName">Name (Optional)</label>
+          <input type="text" id="feedbackName" name="name">
+        </div>
+        <div class="form-group">
+          <label for="feedbackEmail">Email (Optional)</label>
+          <input type="email" id="feedbackEmail" name="email">
+        </div>
+        <div class="form-group">
+          <label for="feedbackMessage">Your Feedback</label>
+          <textarea id="feedbackMessage" name="message" rows="8" required></textarea>
+        </div>
+        <button type="submit" class="btn-primary">Submit Feedback</button>
+      </form>
+
+      <div class="feedback-info">
+        <h2>What Happens Next?</h2>
+        <p>We review all feedback regularly and use it to guide our development priorities. While we can't respond to every submission, we appreciate every piece of feedback we receive.</p>
+      </div>
+    </div>
+  </div>
+</section>
+

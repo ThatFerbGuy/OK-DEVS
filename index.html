@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>OK Devs | Home</title>
+  <title>OK Devs | Building the Future, Bit by Bit</title>
   <link rel="stylesheet" href="css/base.css">
   <link rel="stylesheet" href="css/theme.css">
   <link rel="stylesheet" href="css/components.css">
@@ -11,91 +11,103 @@
 <body>
   <!-- Loader -->
   <div id="loader">
-    <h1>OK Devs</h1>
-    <p>Building awesome since day one...</p>
+    <svg width="120" height="40" viewBox="0 0 120 40" xmlns="http://www.w3.org/2000/svg">
+      <text x="10" y="28" font-family="Arial, sans-serif" font-size="24" font-weight="bold" fill="white" stroke="white" stroke-width="0.5">
+        <animate attributeName="opacity" values="0.3;1;0.3" dur="2s" repeatCount="indefinite"/>
+        OK Devs
+      </text>
+    </svg>
   </div>
-
-  <!-- Sidebar Overlay -->
-  <div id="sidebarOverlay" class="sidebar-overlay"></div>
 
   <!-- Sidebar -->
   <aside id="sidebar" class="sidebar">
-    <button id="closeSidebar" aria-label="Close sidebar">✕</button>
-    <nav>
-      <a href="index.html">Home</a>
-      <a href="about.html">About</a>
-      <a href="projects.html">Projects</a>
-      <a href="blogs.html">Blogs</a>
-      <a href="milestones.html">Milestones</a>
-      <a href="contact.html">Contact</a>
-      <a href="feedback.html">Feedback</a>
+    <div class="sidebar-logo">
+      <svg width="80" height="30" viewBox="0 0 120 40" xmlns="http://www.w3.org/2000/svg">
+        <text x="10" y="28" font-family="Arial, sans-serif" font-size="20" font-weight="bold" fill="currentColor">
+          OK Devs
+        </text>
+      </svg>
+    </div>
+    <nav class="sidebar-nav">
+      <a href="#" data-view="home" class="nav-item" title="Home">
+        <span class="nav-icon">🏠</span>
+        <span class="nav-label">Home</span>
+      </a>
+      <a href="#" data-view="projects" class="nav-item" title="Projects">
+        <span class="nav-icon">💼</span>
+        <span class="nav-label">Projects</span>
+      </a>
+      <a href="#" data-view="solutions" class="nav-item" title="Solutions">
+        <span class="nav-icon">⚡</span>
+        <span class="nav-label">Solutions</span>
+      </a>
+      <a href="#" data-view="milestones" class="nav-item" title="Milestones">
+        <span class="nav-icon">🎯</span>
+        <span class="nav-label">Milestones</span>
+      </a>
+      <a href="#" data-view="blog" class="nav-item" title="Blog">
+        <span class="nav-icon">📝</span>
+        <span class="nav-label">Blog</span>
+      </a>
+    </nav>
+    <nav class="sidebar-nav sidebar-nav-bottom">
+      <a href="#" data-view="about" class="nav-item" title="About">
+        <span class="nav-icon">ℹ️</span>
+        <span class="nav-label">About</span>
+      </a>
+      <a href="#" data-view="legal" class="nav-item" title="Legal">
+        <span class="nav-icon">📄</span>
+        <span class="nav-label">Legal</span>
+      </a>
     </nav>
   </aside>
 
   <!-- Top Bar -->
-  <header class="topbar">
-    <button id="menuBtn" aria-label="Open menu">☰</button>
-    <div class="right">
-      <input type="text" id="searchInput" placeholder="Search..." aria-label="Search">
-      <button id="themeToggle" aria-label="Toggle theme">🌙</button>
+  <header id="topbar" class="topbar">
+    <div class="breadcrumbs" id="breadcrumbs">
+      <span class="breadcrumb-item">Home</span>
+    </div>
+    <div class="topbar-right">
+      <button id="cmdPaletteBtn" class="cmd-trigger" aria-label="Command Palette">
+        <span class="cmd-key">⌘</span>K
+      </button>
+      <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">🌙</button>
+      <button id="letsTalkBtn" class="btn-primary">Let's Talk</button>
     </div>
   </header>
 
-  <!-- Main Content -->
-  <main>
-    <div class="container">
-      <section class="hero">
-        <h1>Welcome to OK Devs</h1>
-        <p>A developer and creator collective building things that matter</p>
-      </section>
-
-      <section class="grid grid-3">
-        <div class="card">
-          <h3>Innovation</h3>
-          <p>We push boundaries and explore new possibilities in technology and design.</p>
-        </div>
-        <div class="card">
-          <h3>Collaboration</h3>
-          <p>Together we build stronger, smarter solutions that make a real impact.</p>
-        </div>
-        <div class="card">
-          <h3>Excellence</h3>
-          <p>Quality and attention to detail drive everything we create.</p>
-        </div>
-      </section>
-
-      <section>
-        <h2>Latest Updates</h2>
-        <div class="grid grid-2">
-          <div class="card">
-            <h3>New Project Launch</h3>
-            <p>We're excited to announce our latest project that combines cutting-edge technology with beautiful design.</p>
-          </div>
-          <div class="card">
-            <h3>Community Growth</h3>
-            <p>Our community continues to grow, bringing together talented developers and creators from around the world.</p>
-          </div>
-        </div>
-      </section>
-    </div>
+  <!-- Main Content Area -->
+  <main id="app-content" class="app-content">
+    <!-- Views will be injected here -->
   </main>
 
-  <!-- Footer -->
-  <footer>
-    <p>&copy; 2025 OK Devs | <a href="privacy.html">Privacy</a> | <a href="terms.html">Terms</a></p>
-  </footer>
-
-  <!-- Chat Popup -->
-  <div id="chatPopup">
-    <button id="chatBtn" aria-label="Open chat">💬</button>
-    <div id="chatWindow">
-      <h4>OK Support</h4>
-      <textarea placeholder="Type your message..." aria-label="Message input"></textarea>
-      <button class="btn">Send</button>
+  <!-- Command Palette -->
+  <div id="cmdPalette" class="cmd-palette">
+    <div class="cmd-palette-overlay"></div>
+    <div class="cmd-palette-modal">
+      <input type="text" id="cmdInput" class="cmd-input" placeholder="Type to search or navigate..." autocomplete="off">
+      <div id="cmdResults" class="cmd-results">
+        <!-- Results will be populated here -->
+      </div>
     </div>
   </div>
 
+  <!-- Chat Popup -->
+  <div id="chatPopup" class="chat-popup">
+    <button id="chatBtn" class="chat-btn" aria-label="Open chat">💬</button>
+    <div id="chatWindow" class="chat-window">
+      <div class="chat-header">
+        <h4>OK Support</h4>
+        <button class="chat-close" aria-label="Close chat">✕</button>
+      </div>
+      <textarea id="chatMessage" placeholder="Type your message..." aria-label="Message input"></textarea>
+      <button class="btn-primary chat-send">Send</button>
+    </div>
+  </div>
+
+  <script src="js/data.js"></script>
+  <script src="js/router.js"></script>
+  <script src="js/ui.js"></script>
   <script src="js/loader.js"></script>
-  <script src="js/main.js"></script>
 </body>
 </html>
