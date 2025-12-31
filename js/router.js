@@ -2,6 +2,9 @@
 
 class Router {
   constructor() {
+    // Detect base path for GitHub Pages
+    this.basePath = this.getBasePath();
+    
     this.routes = {
       'home': 'views/home.html',
       'projects': 'views/projects.html',
@@ -17,6 +20,20 @@ class Router {
     
     this.currentView = 'home';
     this.init();
+  }
+
+  getBasePath() {
+    // Get the base path from the current location
+    const path = window.location.pathname;
+    // If path includes /OK-DEVS/, extract it
+    if (path.includes('/OK-DEVS')) {
+      const match = path.match(/^(\/OK-DEVS\/?)/);
+      if (match) {
+        // Ensure trailing slash for consistency
+        return match[1].endsWith('/') ? match[1] : match[1] + '/';
+      }
+    }
+    return '/';
   }
 
   init() {
@@ -52,15 +69,20 @@ class Router {
   }
 
   handleRoute() {
-    const path = window.location.pathname;
     const hash = window.location.hash.slice(1);
+    const path = window.location.pathname;
     
     let view = 'home';
     
+    // Prioritize hash-based routing (works better with GitHub Pages)
     if (hash) {
       view = hash;
-    } else if (path !== '/' && path !== '/index.html') {
-      view = path.split('/').pop().replace('.html', '') || 'home';
+    } else {
+      // Fallback to path-based routing
+      const cleanPath = path.replace(this.basePath, '').replace(/^\//, '').replace(/\/$/, '');
+      if (cleanPath && cleanPath !== 'index.html' && cleanPath !== '') {
+        view = cleanPath.replace('.html', '');
+      }
     }
 
     if (!this.routes[view]) {
@@ -80,11 +102,21 @@ class Router {
     appContent.classList.add('loading');
 
     try {
-      const response = await fetch(this.routes[view]);
+      // Use base path for fetching views
+      const viewPath = this.basePath !== '/' ? `${this.basePath}${this.routes[view]}` : this.routes[view];
+      const response = await fetch(viewPath);
       if (!response.ok) {
         throw new Error('View not found');
       }
-      const html = await response.text();
+      let html = await response.text();
+      
+      // Fix asset paths for GitHub Pages base path
+      if (this.basePath !== '/') {
+        // Fix relative asset paths that don't start with http://, https://, or /
+        html = html.replace(/src="(?!https?:\/\/|\/)(assets\/)/g, `src="${this.basePath}$1`);
+        html = html.replace(/href="(?!https?:\/\/|\/)(assets\/)/g, `href="${this.basePath}$1`);
+      }
+      
       appContent.innerHTML = html;
       
       // Initialize view-specific functionality
@@ -217,8 +249,16 @@ class Router {
   }
 
   updateURL(view) {
-    const url = view === 'home' ? '/' : `#${view}`;
-    window.history.pushState({ view }, '', url);
+    // Use hash-based routing for GitHub Pages compatibility
+    if (view === 'home') {
+      // For home, use base path or root
+      const url = this.basePath !== '/' ? this.basePath : '/';
+      window.history.pushState({ view }, '', url);
+    } else {
+      // For other views, use hash
+      const url = this.basePath !== '/' ? `${this.basePath}#${view}` : `#${view}`;
+      window.history.pushState({ view }, '', url);
+    }
   }
 
   updateBreadcrumbs(view) {
