@@ -1,0 +1,102 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+  }
+  
+  body {
+    background: linear-gradient(120deg, #6c63ff, #3a0ca3);
+    color: #fff;
+    overflow-x: hidden;
+    transition: 0.3s ease;
+  }
+  
+  /* Top Bar */
+  .topbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem;
+    background: rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(8px);
+  }
+  .topbar input {
+    padding: 5px 10px;
+    border-radius: 5px;
+    border: none;
+  }
+  
+  /* Sidebar */
+  .sidebar {
+    position: fixed;
+    top: 0;
+    left: -220px;
+    width: 200px;
+    height: 100%;
+    background: rgba(20, 20, 40, 0.9);
+    padding: 2rem 1rem;
+    transition: left 0.3s ease;
+  }
+  .sidebar a {
+    display: block;
+    color: #fff;
+    text-decoration: none;
+    margin: 10px 0;
+  }
+  .sidebar.open {
+    left: 0;
+  }
+  
+  /* Slider */
+  .slider {
+    height: 80vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: slide 12s infinite;
+    text-align: center;
+    font-size: 2rem;
+  }
+  @keyframes slide {
+    0%, 33% { content: "Slide 1"; }
+    34%, 66% { content: "Slide 2"; }
+    67%, 100% { content: "Slide 3"; }
+  }
+  
+  /* Footer */
+  footer {
+    text-align: center;
+    padding: 1rem;
+    background: rgba(0, 0, 0, 0.2);
+  }
+  
+  /* Chat Popup */
+  #chatPopup {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+  }
+  #chatWindow {
+    display: none;
+    flex-direction: column;
+    background: #2a2a4a;
+    padding: 1rem;
+    border-radius: 10px;
+    width: 250px;
+  }
+  #chatWindow.open { display: flex; }
+  
+  /* Loader */
+  #loader {
+    position: fixed;
+    inset: 0;
+    background: #3a0ca3;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    z-index: 100;
+  }
+  

@@ -1,0 +1,55 @@
+/* Theme Variables */
+:root {
+  /* Light Mode Colors */
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8f9fa;
+  --bg-tertiary: #e9ecef;
+  --text-primary: #1a1a2e;
+  --text-secondary: #4a4a6e;
+  --text-tertiary: #6a6a8e;
+  --accent-color: #6366f1;
+  --accent-hover: #4f46e5;
+  --accent-light: #818cf8;
+  --border-color: #e2e8f0;
+  --shadow: rgba(0, 0, 0, 0.1);
+  --overlay: rgba(0, 0, 0, 0.5);
+  
+  /* Blue-Purple Gradient */
+  --gradient-start: #6366f1;
+  --gradient-end: #8b5cf6;
+  --gradient-alt: #3b82f6;
+}
+
+[data-theme="dark"] {
+  /* Dark Mode Colors */
+  --bg-primary: #0f0f1e;
+  --bg-secondary: #1a1a2e;
+  --bg-tertiary: #252540;
+  --text-primary: #f8f9fa;
+  --text-secondary: #d1d5db;
+  --text-tertiary: #9ca3af;
+  --accent-color: #818cf8;
+  --accent-hover: #a78bfa;
+  --accent-light: #6366f1;
+  --border-color: #374151;
+  --shadow: rgba(0, 0, 0, 0.3);
+  --overlay: rgba(0, 0, 0, 0.7);
+  
+  /* Blue-Purple Gradient (darker) */
+  --gradient-start: #4f46e5;
+  --gradient-end: #7c3aed;
+  --gradient-alt: #2563eb;
+}
+
+/* Base Theme Application */
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Theme Transition */
+* {
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+}
+

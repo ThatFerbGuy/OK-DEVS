@@ -1,0 +1,50 @@
+/* Default Light Theme */
+:root {
+    --bg-color: #f5f7ff;
+    --text-color: #111;
+    --primary-color: #5c6bc0; /* blue-purple */
+    --accent-color: #7e57c2;
+    --card-bg: #fff;
+    --shadow: rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Dark Theme */
+  body.dark {
+    --bg-color: #0e0e16;
+    --text-color: #f2f2f2;
+    --primary-color: #7c4dff;
+    --accent-color: #b388ff;
+    --card-bg: #1a1a24;
+    --shadow: rgba(255, 255, 255, 0.1);
+  }
+  
+  /* Apply theme variables */
+  body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    transition: background 0.3s ease, color 0.3s ease;
+    font-family: "Poppins", sans-serif;
+  }
+  
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    background: var(--card-bg);
+    box-shadow: 0 2px 8px var(--shadow);
+  }
+  
+  button, input {
+    background: var(--card-bg);
+    border: 1px solid var(--primary-color);
+    color: var(--text-color);
+    padding: 0.5rem 1rem;
+    border-radius: 8px;
+  }
+  
+  button:hover {
+    background: var(--primary-color);
+    color: white;
+  }
+  
