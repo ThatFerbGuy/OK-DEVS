@@ -165,6 +165,43 @@ class Router {
         `).join('');
       }
     }
+    
+    // Optimize video for mobile
+    this.optimizeHeroVideo();
+  }
+
+  optimizeHeroVideo() {
+    const video = document.querySelector('.hero-video');
+    if (!video) return;
+    
+    // Mobile optimizations
+    if (window.innerWidth <= 768) {
+      // Set video attributes for mobile performance
+      video.setAttribute('playsinline', 'true');
+      video.setAttribute('webkit-playsinline', 'true');
+      
+      // Reduce video quality on mobile by adjusting playback
+      // Note: Actual resolution reduction would require multiple video sources
+      // This ensures the video fits the screen properly
+      video.style.width = '100%';
+      video.style.height = '100%';
+      video.style.objectFit = 'cover';
+      
+      // Pause video if not in viewport to save resources
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            video.play().catch(() => {
+              // Autoplay may be blocked, ignore error
+            });
+          } else {
+            video.pause();
+          }
+        });
+      }, { threshold: 0.5 });
+      
+      observer.observe(video);
+    }
   }
 
   initProjectsView() {

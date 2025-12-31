@@ -30,29 +30,67 @@
 // Sidebar Management
 (function() {
   const sidebar = document.getElementById('sidebar');
+  const menuBtn = document.getElementById('menuBtn');
   let sidebarTimeout;
+  let isMobile = () => window.innerWidth <= 768;
+  
+  // Toggle sidebar on menu button click (mobile)
+  if (menuBtn && sidebar) {
+    menuBtn.addEventListener('click', () => {
+      if (isMobile()) {
+        sidebar.classList.toggle('expanded');
+      }
+    });
+  }
   
   if (sidebar) {
-    // Expand on hover
-    sidebar.addEventListener('mouseenter', () => {
-      clearTimeout(sidebarTimeout);
-      sidebar.classList.add('expanded');
-    });
+    // Expand on hover (desktop only)
+    if (!isMobile()) {
+      sidebar.addEventListener('mouseenter', () => {
+        clearTimeout(sidebarTimeout);
+        sidebar.classList.add('expanded');
+      });
+      
+      sidebar.addEventListener('mouseleave', () => {
+        sidebarTimeout = setTimeout(() => {
+          sidebar.classList.remove('expanded');
+        }, 300);
+      });
+    }
     
-    sidebar.addEventListener('mouseleave', () => {
-      sidebarTimeout = setTimeout(() => {
-        sidebar.classList.remove('expanded');
-      }, 300);
-    });
-    
-    // Toggle on click (mobile)
+    // Close sidebar when clicking nav items (mobile)
     const navItems = sidebar.querySelectorAll('.nav-item');
     navItems.forEach(item => {
-      item.addEventListener('click', () => {
-        if (window.innerWidth <= 768) {
+      item.addEventListener('click', (e) => {
+        // Check if nav-label was clicked specifically
+        const navLabel = item.querySelector('.nav-label');
+        const clickedLabel = navLabel && navLabel.contains(e.target);
+        
+        if (isMobile() && (clickedLabel || !navLabel)) {
+          // Close sidebar after a short delay to allow navigation
+          setTimeout(() => {
+            sidebar.classList.remove('expanded');
+          }, 100);
+        }
+      });
+    });
+    
+    // Close sidebar when clicking outside (mobile)
+    if (isMobile()) {
+      document.addEventListener('click', (e) => {
+        if (sidebar.classList.contains('expanded') && 
+            !sidebar.contains(e.target) && 
+            !menuBtn.contains(e.target)) {
           sidebar.classList.remove('expanded');
         }
       });
+    }
+    
+    // Update behavior on window resize
+    window.addEventListener('resize', () => {
+      if (!isMobile() && sidebar.classList.contains('expanded')) {
+        sidebar.classList.remove('expanded');
+      }
     });
   }
 })();
