@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OK Devs | Projects</title>
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/theme.css">
+  <link rel="stylesheet" href="css/components.css">
+</head>
+<body>
+  <!-- Loader -->
+  <div id="loader">
+    <h1>OK Devs</h1>
+    <p>Building awesome since day one...</p>
+  </div>
+
+  <!-- Sidebar Overlay -->
+  <div id="sidebarOverlay" class="sidebar-overlay"></div>
+
+  <!-- Sidebar -->
+  <aside id="sidebar" class="sidebar">
+    <button id="closeSidebar" aria-label="Close sidebar">✕</button>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="projects.html">Projects</a>
+      <a href="blogs.html">Blogs</a>
+      <a href="milestones.html">Milestones</a>
+      <a href="contact.html">Contact</a>
+      <a href="feedback.html">Feedback</a>
+    </nav>
+  </aside>
+
+  <!-- Top Bar -->
+  <header class="topbar">
+    <button id="menuBtn" aria-label="Open menu">☰</button>
+    <div class="right">
+      <input type="text" id="searchInput" placeholder="Search..." aria-label="Search">
+      <button id="themeToggle" aria-label="Toggle theme">🌙</button>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main>
+    <div class="container">
+      <h1>Our Projects</h1>
+      <p>Explore the innovative solutions and creative work we've built together.</p>
+
+      <section class="grid grid-3">
+        <div class="card">
+          <h3>Project Alpha</h3>
+          <p>A modern web application built with cutting-edge technologies, focusing on user experience and performance.</p>
+        </div>
+
+        <div class="card">
+          <h3>Project Beta</h3>
+          <p>An open-source tool that simplifies complex workflows for developers and designers alike.</p>
+        </div>
+
+        <div class="card">
+          <h3>Project Gamma</h3>
+          <p>A mobile-first platform designed to connect communities and foster collaboration.</p>
+        </div>
+
+        <div class="card">
+          <h3>Project Delta</h3>
+          <p>An innovative design system that promotes consistency and accelerates development.</p>
+        </div>
+
+        <div class="card">
+          <h3>Project Epsilon</h3>
+          <p>A data visualization tool that makes complex information accessible and engaging.</p>
+        </div>
+
+        <div class="card">
+          <h3>Project Zeta</h3>
+          <p>A developer toolkit that streamlines common tasks and improves productivity.</p>
+        </div>
+      </section>
+
+      <section class="card">
+        <h2>Coming Soon</h2>
+        <p>We're always working on new projects. Stay tuned for updates on our latest innovations and collaborations.</p>
+      </section>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2025 OK Devs | <a href="privacy.html">Privacy</a> | <a href="terms.html">Terms</a></p>
+  </footer>
+
+  <!-- Chat Popup -->
+  <div id="chatPopup">
+    <button id="chatBtn" aria-label="Open chat">💬</button>
+    <div id="chatWindow">
+      <h4>OK Support</h4>
+      <textarea placeholder="Type your message..." aria-label="Message input"></textarea>
+      <button class="btn">Send</button>
+    </div>
+  </div>
+
+  <script src="js/loader.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

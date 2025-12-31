@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OK Devs | Feedback</title>
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/theme.css">
+  <link rel="stylesheet" href="css/components.css">
+</head>
+<body>
+  <!-- Loader -->
+  <div id="loader">
+    <h1>OK Devs</h1>
+    <p>Building awesome since day one...</p>
+  </div>
+
+  <!-- Sidebar Overlay -->
+  <div id="sidebarOverlay" class="sidebar-overlay"></div>
+
+  <!-- Sidebar -->
+  <aside id="sidebar" class="sidebar">
+    <button id="closeSidebar" aria-label="Close sidebar">✕</button>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="projects.html">Projects</a>
+      <a href="blogs.html">Blogs</a>
+      <a href="milestones.html">Milestones</a>
+      <a href="contact.html">Contact</a>
+      <a href="feedback.html">Feedback</a>
+    </nav>
+  </aside>
+
+  <!-- Top Bar -->
+  <header class="topbar">
+    <button id="menuBtn" aria-label="Open menu">☰</button>
+    <div class="right">
+      <input type="text" id="searchInput" placeholder="Search..." aria-label="Search">
+      <button id="themeToggle" aria-label="Toggle theme">🌙</button>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main>
+    <div class="container">
+      <h1>Feedback</h1>
+      <p>Your feedback helps us improve. Share your thoughts, suggestions, or report issues.</p>
+
+      <section class="card">
+        <h2>Share Your Feedback</h2>
+        <form>
+          <div class="form-group">
+            <label for="feedback-type">Feedback Type</label>
+            <select id="feedback-type" name="feedback-type" style="width: 100%; padding: 0.75rem; border: 1px solid var(--border-color); border-radius: 8px; background: var(--bg-primary); color: var(--text-primary);">
+              <option value="suggestion">Suggestion</option>
+              <option value="bug">Bug Report</option>
+              <option value="feature">Feature Request</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="feedback-name">Name (Optional)</label>
+            <input type="text" id="feedback-name" name="feedback-name">
+          </div>
+          <div class="form-group">
+            <label for="feedback-email">Email (Optional)</label>
+            <input type="email" id="feedback-email" name="feedback-email">
+          </div>
+          <div class="form-group">
+            <label for="feedback-message">Your Feedback</label>
+            <textarea id="feedback-message" name="feedback-message" required></textarea>
+          </div>
+          <button type="submit" class="btn">Submit Feedback</button>
+        </form>
+      </section>
+
+      <section class="card">
+        <h2>What Happens Next?</h2>
+        <p>We review all feedback regularly and use it to guide our development priorities. While we can't respond to every submission, we appreciate every piece of feedback we receive.</p>
+      </section>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2025 OK Devs | <a href="privacy.html">Privacy</a> | <a href="terms.html">Terms</a></p>
+  </footer>
+
+  <!-- Chat Popup -->
+  <div id="chatPopup">
+    <button id="chatBtn" aria-label="Open chat">💬</button>
+    <div id="chatWindow">
+      <h4>OK Support</h4>
+      <textarea placeholder="Type your message..." aria-label="Message input"></textarea>
+      <button class="btn">Send</button>
+    </div>
+  </div>
+
+  <script src="js/loader.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

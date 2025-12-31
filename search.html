@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OK Devs | Search</title>
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/theme.css">
+  <link rel="stylesheet" href="css/components.css">
+</head>
+<body>
+  <!-- Loader -->
+  <div id="loader">
+    <h1>OK Devs</h1>
+    <p>Building awesome since day one...</p>
+  </div>
+
+  <!-- Sidebar Overlay -->
+  <div id="sidebarOverlay" class="sidebar-overlay"></div>
+
+  <!-- Sidebar -->
+  <aside id="sidebar" class="sidebar">
+    <button id="closeSidebar" aria-label="Close sidebar">✕</button>
+    <nav>
+      <a href="index.html">Home</a>
+      <a href="about.html">About</a>
+      <a href="projects.html">Projects</a>
+      <a href="blogs.html">Blogs</a>
+      <a href="milestones.html">Milestones</a>
+      <a href="contact.html">Contact</a>
+      <a href="feedback.html">Feedback</a>
+    </nav>
+  </aside>
+
+  <!-- Top Bar -->
+  <header class="topbar">
+    <button id="menuBtn" aria-label="Open menu">☰</button>
+    <div class="right">
+      <input type="text" id="searchInput" placeholder="Search..." aria-label="Search">
+      <button id="themeToggle" aria-label="Toggle theme">🌙</button>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main>
+    <div class="container">
+      <h1>Search Results</h1>
+      
+      <section class="search-results" id="searchResults">
+        <p>Enter a search term in the search bar above to find content across the site.</p>
+      </section>
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <p>&copy; 2025 OK Devs | <a href="privacy.html">Privacy</a> | <a href="terms.html">Terms</a></p>
+  </footer>
+
+  <!-- Chat Popup -->
+  <div id="chatPopup">
+    <button id="chatBtn" aria-label="Open chat">💬</button>
+    <div id="chatWindow">
+      <h4>OK Support</h4>
+      <textarea placeholder="Type your message..." aria-label="Message input"></textarea>
+      <button class="btn">Send</button>
+    </div>
+  </div>
+
+  <script src="js/loader.js"></script>
+  <script src="js/main.js"></script>
+  <script>
+    // Search functionality
+    (function() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const query = urlParams.get('q');
+      const searchInput = document.getElementById('searchInput');
+      const searchResults = document.getElementById('searchResults');
+      
+      if (query && searchInput) {
+        searchInput.value = query;
+      }
+      
+      if (query && searchResults) {
+        // Placeholder search results
+        const results = [
+          { title: 'About OK Devs', url: 'about.html', snippet: 'Learn about our mission, values, and what we do.' },
+          { title: 'Project Alpha', url: 'projects.html', snippet: 'A modern web application built with cutting-edge technologies.' },
+          { title: 'Getting Started with Modern Web Development', url: 'blogs.html', snippet: 'Learn the fundamentals of building modern web applications.' },
+          { title: 'Contact Us', url: 'contact.html', snippet: 'Get in touch with the OK Devs team.' }
+        ];
+        
+        const filtered = results.filter(r => 
+          r.title.toLowerCase().includes(query.toLowerCase()) || 
+          r.snippet.toLowerCase().includes(query.toLowerCase())
+        );
+        
+        if (filtered.length > 0) {
+          searchResults.innerHTML = `<p>Found ${filtered.length} result(s) for "${query}":</p>` +
+            filtered.map(r => `
+              <div class="search-item">
+                <h3><a href="${r.url}">${r.title}</a></h3>
+                <p>${r.snippet}</p>
+              </div>
+            `).join('');
+        } else {
+          searchResults.innerHTML = `<p>No results found for "${query}". Try a different search term.</p>`;
+        }
+      }
+    })();
+  </script>
+</body>
+</html>
+
