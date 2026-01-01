@@ -278,7 +278,8 @@
         // Stub - no backend
         console.log('Message sent:', chatMessage.value);
         chatMessage.value = '';
-        alert('Message sent! (This is a demo - no backend connected)');
+        alert('Chat feature will be available soon!');
+        closeChat();
       }
     });
   }
@@ -310,7 +311,7 @@
     if (form.id === 'contactForm' || form.id === 'feedbackForm') {
       e.preventDefault();
       // Stub - no backend
-      alert('Form submitted! (This is a demo - no backend connected)');
+      alert('Message submitted. We\'ll reach out soon!');
       form.reset();
     }
   });

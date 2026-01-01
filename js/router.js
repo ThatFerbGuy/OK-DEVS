@@ -11,6 +11,7 @@ class Router {
       'solutions': 'views/solutions.html',
       'milestones': 'views/milestones.html',
       'blog': 'views/blog.html',
+      'blog-post': 'views/blog-post.html',
       'contact': 'views/contact.html',
       'feedback': 'views/feedback.html',
       'about': 'views/about.html',
@@ -48,7 +49,8 @@ class Router {
       if (link) {
         e.preventDefault();
         const view = link.getAttribute('data-view');
-        this.navigate(view);
+        const blogSlug = link.getAttribute('data-blog-slug');
+        this.navigate(view, blogSlug);
       }
     });
 
@@ -56,14 +58,14 @@ class Router {
     this.handleRoute();
   }
 
-  navigate(view) {
+  navigate(view, blogSlug = null) {
     if (!this.routes[view]) {
       view = '404';
     }
 
     this.currentView = view;
-    this.loadView(view);
-    this.updateURL(view);
+    this.loadView(view, blogSlug);
+    this.updateURL(view, blogSlug);
     this.updateBreadcrumbs(view);
     this.updateActiveNav(view);
   }
@@ -73,10 +75,17 @@ class Router {
     const path = window.location.pathname;
     
     let view = 'home';
+    let blogSlug = null;
     
     // Prioritize hash-based routing (works better with GitHub Pages)
     if (hash) {
-      view = hash;
+      // Check if it's a blog post (format: blog-slug)
+      if (hash.startsWith('blog-') && hash.length > 5) {
+        view = 'blog-post';
+        blogSlug = hash.substring(5); // Get slug after 'blog-'
+      } else {
+        view = hash;
+      }
     } else {
       // Fallback to path-based routing
       const cleanPath = path.replace(this.basePath, '').replace(/^\//, '').replace(/\/$/, '');
@@ -90,12 +99,12 @@ class Router {
     }
 
     this.currentView = view;
-    this.loadView(view);
+    this.loadView(view, blogSlug);
     this.updateBreadcrumbs(view);
     this.updateActiveNav(view);
   }
 
-  async loadView(view) {
+  async loadView(view, blogSlug = null) {
     const appContent = document.getElementById('app-content');
     if (!appContent) return;
 
@@ -117,10 +126,13 @@ class Router {
         html = html.replace(/href="(?!https?:\/\/|\/)(assets\/)/g, `href="${this.basePath}$1`);
       }
       
+      // Fix image paths in dynamically generated content (milestones, etc.)
+      // This will be handled by the initView methods that generate HTML
+      
       appContent.innerHTML = html;
       
       // Initialize view-specific functionality
-      this.initView(view);
+      await this.initView(view, blogSlug);
       
       // Scroll to top
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -132,11 +144,11 @@ class Router {
     }
   }
 
-  initView(view) {
+  async initView(view, blogSlug = null) {
     // Initialize view-specific data and functionality
     switch(view) {
       case 'home':
-        this.initHomeView();
+        await this.initHomeView();
         break;
       case 'projects':
         this.initProjectsView();
@@ -145,22 +157,39 @@ class Router {
         this.initSolutionsView();
         break;
       case 'milestones':
-        this.initMilestonesView();
+        await this.initMilestonesView();
+        break;
+      case 'blog':
+        this.initBlogView();
+        break;
+      case 'blog-post':
+        this.initBlogPostView(blogSlug);
         break;
     }
   }
 
-  initHomeView() {
+  async initHomeView() {
     // Load recent milestones
-    if (typeof milestonesData !== 'undefined') {
-      const recentMilestones = milestonesData.slice(0, 2);
-      const container = document.getElementById('recentMilestones');
-      if (container) {
+    const container = document.getElementById('recentMilestones');
+    if (container) {
+      // Fetch milestones from milestones.html
+      let milestones = [];
+      if (typeof fetchMilestonesData !== 'undefined') {
+        milestones = await fetchMilestonesData(this.basePath);
+      } else if (typeof milestonesData !== 'undefined' && milestonesData.length > 0) {
+        // Fallback to static data if fetch function not available
+        milestones = milestonesData;
+      }
+      
+      if (milestones.length > 0) {
+        const recentMilestones = milestones.slice(0, 2);
+        const basePath = this.basePath !== '/' ? this.basePath : '';
         container.innerHTML = recentMilestones.map(m => `
           <div class="milestone-card">
             <div class="milestone-date">${m.date}</div>
             <h3>${m.title}</h3>
             <p>${m.description}</p>
+            ${m.image ? `<div class="milestone-card-image"><img src="${basePath}assets/${m.image}" alt="${m.title}" loading="lazy"></div>` : ''}
           </div>
         `).join('');
       }
@@ -215,7 +244,10 @@ class Router {
             <div class="project-tech">
               ${project.tech.map(t => `<span class="tech-tag">${t}</span>`).join('')}
             </div>
-            <a href="#" data-view="contact" class="btn-secondary" style="margin-top: 1rem; display: inline-block;">Learn More</a>
+            <div style="margin-top: 1rem; display: flex; gap: 0.5rem; flex-wrap: wrap;">
+              <a href="${project.demoLink || '#'}" target="_blank" rel="noopener noreferrer" class="btn-primary" style="display: inline-block;">Live Demo</a>
+              <a href="${project.githubLink || '#'}" target="_blank" rel="noopener noreferrer" class="btn-secondary" style="display: inline-block;">GitHub</a>
+            </div>
           </div>
         `).join('');
       }
@@ -240,25 +272,40 @@ class Router {
     }
   }
 
-  initMilestonesView() {
-    if (typeof milestonesData !== 'undefined') {
-      const container = document.getElementById('milestonesTimeline');
-      if (container) {
-        container.innerHTML = milestonesData.map(milestone => `
-          <div class="milestone-item">
-            <div class="milestone-content">
-              <div class="milestone-date">${milestone.date}</div>
-              <h3 class="milestone-title">${milestone.title}</h3>
-              <p>${milestone.description}</p>
-              <div class="milestone-media">${milestone.media}</div>
-            </div>
-          </div>
-        `).join('');
-
-        // Initialize timeline scroll animation
-        this.initTimelineAnimation();
-      }
+  async initMilestonesView() {
+    const container = document.getElementById('milestonesTimeline');
+    if (!container) return;
+    
+    // Fetch milestones from milestones.html
+    let milestones = [];
+    if (typeof fetchMilestonesData !== 'undefined') {
+      milestones = await fetchMilestonesData(this.basePath);
+    } else if (typeof milestonesData !== 'undefined' && milestonesData.length > 0) {
+      // Fallback to static data if fetch function not available
+      milestones = milestonesData;
     }
+    
+    if (milestones.length === 0) {
+      container.innerHTML = '<p>No milestones found.</p>';
+      return;
+    }
+    
+    const basePath = this.basePath !== '/' ? this.basePath : '';
+    container.innerHTML = milestones.map(milestone => `
+      <div class="milestone-item">
+        <div class="milestone-content">
+          <div class="milestone-date">${milestone.date}</div>
+          <h3 class="milestone-title">${milestone.title}</h3>
+          <p>${milestone.description}</p>
+          <div class="milestone-media">
+            ${milestone.image ? `<img src="${basePath}assets/${milestone.image}" alt="${milestone.title}" loading="lazy">` : ''}
+          </div>
+        </div>
+      </div>
+    `).join('');
+
+    // Initialize timeline scroll animation
+    this.initTimelineAnimation();
   }
 
   initTimelineAnimation() {
@@ -285,12 +332,78 @@ class Router {
     updateTimeline();
   }
 
-  updateURL(view) {
+  initBlogView() {
+    if (typeof blogsData !== 'undefined') {
+      const container = document.getElementById('blogGrid');
+      if (container) {
+        container.innerHTML = blogsData.map(blog => `
+          <article class="blog-card">
+            <div class="blog-meta">
+              <span class="blog-date">${blog.date}</span>
+              <span class="blog-category">${blog.category}</span>
+            </div>
+            <h2>${blog.title}</h2>
+            <p>${blog.excerpt}</p>
+            <a href="#" data-view="blog-post" data-blog-slug="${blog.slug}" class="blog-link">Read more →</a>
+          </article>
+        `).join('');
+        
+        // Add click handlers for blog post links
+        container.querySelectorAll('[data-blog-slug]').forEach(link => {
+          link.addEventListener('click', (e) => {
+            e.preventDefault();
+            const slug = link.getAttribute('data-blog-slug');
+            this.navigate('blog-post', slug);
+          });
+        });
+      }
+    }
+  }
+
+  initBlogPostView(slug) {
+    if (typeof blogsData === 'undefined' || !slug) {
+      // Redirect to 404 if no slug or data
+      this.navigate('404');
+      return;
+    }
+
+    const blog = blogsData.find(b => b.slug === slug);
+    if (!blog) {
+      this.navigate('404');
+      return;
+    }
+
+    // Populate blog post
+    const titleEl = document.getElementById('blogPostTitle');
+    const metaEl = document.getElementById('blogPostMeta');
+    const contentEl = document.getElementById('blogPostContent');
+
+    if (titleEl) {
+      titleEl.textContent = blog.title;
+    }
+
+    if (metaEl) {
+      metaEl.innerHTML = `
+        <span class="blog-date">${blog.date}</span>
+        <span class="blog-category">${blog.category}</span>
+      `;
+    }
+
+    if (contentEl) {
+      contentEl.innerHTML = blog.content;
+    }
+  }
+
+  updateURL(view, blogSlug = null) {
     // Use hash-based routing for GitHub Pages compatibility
     if (view === 'home') {
       // For home, use base path or root
       const url = this.basePath !== '/' ? this.basePath : '/';
       window.history.pushState({ view }, '', url);
+    } else if (view === 'blog-post' && blogSlug) {
+      // For blog posts, include slug in hash
+      const url = this.basePath !== '/' ? `${this.basePath}#blog-${blogSlug}` : `#blog-${blogSlug}`;
+      window.history.pushState({ view, blogSlug }, '', url);
     } else {
       // For other views, use hash
       const url = this.basePath !== '/' ? `${this.basePath}#${view}` : `#${view}`;
@@ -308,6 +421,7 @@ class Router {
       'solutions': 'Solutions',
       'milestones': 'Milestones',
       'blog': 'Blog',
+      'blog-post': 'Blog',
       'contact': 'Contact',
       'feedback': 'Feedback',
       'about': 'About',
